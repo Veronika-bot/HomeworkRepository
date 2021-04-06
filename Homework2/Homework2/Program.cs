@@ -77,11 +77,17 @@ namespace Homework2
                 }
 
                 string today = DateTime.Today.DayOfWeek.ToString();
+                int numberdaytoday = (int)DateTime.Today.DayOfWeek;
+                DateTime nextday = DateTime.Today.AddDays((numberofday -numberdaytoday + 7) % 7);
+                if (nextday == DateTime.Today)
+                {
+                    nextday = nextday.AddDays(7);
+                }
 
                 Console.ForegroundColor = (ConsoleColor)color;
                 if (numberofday != -1)
                 {
-                    Console.WriteLine($"{day} - {numberofday}, {days} days before the weekend");
+                    Console.WriteLine($"{day} - {numberofday}, {days} days before the weekend, {nextday} - next {day} date");
                     if (today == day)
                     {
                         Console.WriteLine($"{today} is today");
