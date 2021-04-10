@@ -4,14 +4,14 @@ namespace Homework2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             string day = string.Empty;
             while (day != "Exit the program")
             {
                 Console.WriteLine("Enter the day of week: ");
                 day = Console.ReadLine().ToLower();
-                int color = 0;
+                int color;
                 int days = -1;
                 int numberofday = -1;
 
