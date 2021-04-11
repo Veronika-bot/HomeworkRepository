@@ -21,31 +21,31 @@ namespace Homework3
             StringTask20();
         }
 
-        public static void ArrayTask1(int dimension)
+        public static void ArrayTask1(int size)
         {
-            Console.WriteLine($"Input {dimension} elements in the array: ");
-            int[] array = Input(dimension);
+            Console.WriteLine($"Input {size} elements in the array: ");
+            int[] array = Input(size);
             Console.Write("Elements in array are: ");
-            Output(array);
+            WriteOutput(array);
         }
 
         public static void ArrayTask5()
         {
             Console.WriteLine("Input the number of elements to be stored in the array : ");
-            int dimension = int.Parse(Console.ReadLine());
+            int size = int.Parse(Console.ReadLine());
 
-            if (dimension < 1)
+            if (size < 1)
             {
                 Console.WriteLine("Incorrectly entered array size");
                 return;
             }
 
-            Console.WriteLine($"Input {dimension} elements in the array : ");
-            int[] array = Input(dimension);
+            Console.WriteLine($"Input {size} elements in the array : ");
+            int[] array = Input(size);
             List<int> list = new(); 
             Array.Sort(array);
-
-            for (int i = 0; i < dimension - 1; i++)
+            
+            for (int i = 0; i < size - 1; i++)
             {
                 if (array[i] == array[i + 1])
                 {
@@ -60,128 +60,130 @@ namespace Homework3
         public static void ArrayTask10()
         {
             Console.Write("Input the number of elements to be stored in the array : ");
-            int dimension = int.Parse(Console.ReadLine());
+            int size = int.Parse(Console.ReadLine());
 
-            if (dimension < 1)
+            if (size < 1)
             {
                 Console.WriteLine("Incorrectly entered array size");
                 return;
             }
 
-            Console.WriteLine($"Input {dimension} elements in the array : ");
+            Console.WriteLine($"Input {size} elements in the array : ");
 
-            int[] array = Input(dimension);
+            int[] array = Input(size);
 
-            int evencount = 0;
+            int evenCount = 0;
 
-            for (int i = 0; i < dimension; i++)
+            for (int i = 0; i < size; i++)
             {
                 if (array[i] % 2 == 0)
                 {
-                    evencount++;
+                    evenCount++;
                 }
             }
 
-            int[] even = new int[evencount];
-            int[] odd = new int[dimension - evencount];
-            int evenindex = 0;
-            int oddindex = 0;
+            int[] even = new int[evenCount];
+            int[] odd = new int[size - evenCount];
+            int evenIndex = 0;
+            int oddIndex = 0;
 
-            for (int i = 0; i < dimension; i++)
+            for (int i = 0; i < size; i++)
             {
                 if (array[i] % 2 == 0)
                 {
-                    even[evenindex] = array[i];
-                    evenindex++;
+                    even[evenIndex] = array[i];
+                    evenIndex++;
                 }
                 else
                 {
-                    odd[oddindex] = array[i];
-                    oddindex++;
+                    odd[oddIndex] = array[i];
+                    oddIndex++;
                 }
             }
 
             Console.WriteLine("The Even elements are: ");
-            Output(even);
+            WriteOutput(even);
             Console.WriteLine();
             Console.WriteLine("The Odds elements are: ");
-            Output(odd);
+            WriteOutput(odd);
         }
+
         public static void ArrayTask15()
         {
             Console.Write("Input the size of array : ");
-            int dimension = int.Parse(Console.ReadLine());
+            int size = int.Parse(Console.ReadLine());
 
-            if (dimension < 1)
+            if (size < 1)
             {
                 Console.WriteLine("Incorrectly entered array size");
                 return;
             }
 
-            Console.WriteLine($"Input {dimension} elements in the array: ");
-            int[] array = Input(dimension);
+            Console.WriteLine($"Input {size} elements in the array: ");
+            int[] array = Input(size);
             Console.WriteLine("Input the position where to delete: ");
-            int deleteposition = int.Parse(Console.ReadLine()) - 1;
+            int deletePosition = int.Parse(Console.ReadLine()) - 1;
 
-            if (deleteposition < 0 || deleteposition >= array.Length)
+            if (deletePosition < 0 || deletePosition >= array.Length)
             {
                 Console.WriteLine("Incorrectly entered position of element");
                 return;
             }
 
-            int[] resultarray = new int[dimension - 1];
+            int[] resultArray = new int[size - 1];
 
-            for (int i = 0; i < deleteposition; i++)
+            for (int i = 0; i < deletePosition; i++)
             {
-                resultarray[i] = array[i];
+                resultArray[i] = array[i];
             }
 
-            for (int i = deleteposition + 1; i < array.Length; i++)
+            for (int i = deletePosition + 1; i < array.Length; i++)
             {
-                resultarray[i - 1] = array[i];
+                resultArray[i - 1] = array[i];
             }
 
             Console.Write("The new list is : ");
-            Output(resultarray);
+            WriteOutput(resultArray);
         }
+
         public static void ArrayTask20()
         {
             Console.Write("Input the size of the square matrix: ");
-            int dimension = int.Parse(Console.ReadLine());
+            int size = int.Parse(Console.ReadLine());
 
-            if (dimension < 1)
+            if (size < 1)
             {
                 Console.WriteLine("Incorrectly entered array size");
                 return;
             }
 
             Console.WriteLine($"Input elements in the first matrix : ");
-            int[,] array1 = Input2D(dimension, dimension);
+            int[,] array1 = Input2D(size, size);
             Console.WriteLine($"Input elements in the second matrix : ");
-            int[,] array2 = Input2D(dimension, dimension);
+            int[,] array2 = Input2D(size, size);
             Console.WriteLine("The First matrix is :");
-            Output2D(array1, dimension);
+            WriteOutput2D(array1, size);
             Console.WriteLine("The Second matrix is :");
-            Output2D(array2, dimension);
-            int[,] resultarray = new int[dimension, dimension];
+            WriteOutput2D(array2, size);
+            int[,] resultArray = new int[size, size];
 
-            for (int i = 0; i < dimension; i++)
+            for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j < dimension; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    resultarray[i, j] = array1[i, j] - array2[i, j];
+                    resultArray[i, j] = array1[i, j] - array2[i, j];
                 }
             }
 
             Console.WriteLine("The Subtraction of two matrix is : ");
-            Output2D(resultarray, dimension);
+            WriteOutput2D(resultArray, size);
         }
 
-        public static int[] Input(int dimension)
+        public static int[] Input(int size)
         {
-            int[] array = new int[dimension];
+            int[] array = new int[size];
 
-            for (int i = 0; i < dimension; i++)
+            for (int i = 0; i < size; i++)
             {
                 Console.Write($"element - {i} : ");
                 array[i] = int.Parse(Console.ReadLine());
@@ -190,7 +192,7 @@ namespace Homework3
             return array;
         }
 
-        public static void Output(int[] array)
+        public static void WriteOutput(int[] array)
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -198,13 +200,13 @@ namespace Homework3
             }
         }
 
-        public static int[,] Input2D(int dimension1, int dimension2)
+        public static int[,] Input2D(int size1, int size2)
         {
-            int[,] array = new int[dimension1, dimension2];
+            int[,] array = new int[size1, size2];
 
-            for (int i = 0; i < dimension1; i++)
+            for (int i = 0; i < size1; i++)
             {
-                for (int j = 0; j < dimension2; j++)
+                for (int j = 0; j < size2; j++)
                 {
                     Console.Write($"element - [{i}],[{j}] : ");
                     array[i, j] = int.Parse(Console.ReadLine());
@@ -214,11 +216,11 @@ namespace Homework3
             return array;
         }
 
-        public static void Output2D(int[,] array, int dimension2)
+        public static void WriteOutput2D(int[,] array, int size2)
         {
             for (int i = 0; i < array.Length; i++)
             {
-                for (int j = 0; j < dimension2; j++)
+                for (int j = 0; j < size2; j++)
                 {
                     Console.Write($"{array[i, j]}  ");
                 }
@@ -226,34 +228,37 @@ namespace Homework3
                 Console.WriteLine();
             }
         }
+
         public static void StringTask1()
         {
             Console.WriteLine("Input the string : ");
             string str = Console.ReadLine(); ;
             Console.Write($"The string you entered is : {str}");
         }
+
         public static void StringTask5()
         {
             Console.WriteLine("Input the string : ");
             string str = Console.ReadLine().Trim();
             str = Regex.Replace(str, @"[^0-9a-zA-Z]", " ");
             str = Regex.Replace(str, @"\s+", " ");
-            int wordsnumber = str.Split(' ').Length;
-            Console.WriteLine($"Total number of words in the string is : {wordsnumber}");
+            int wordsNumber = str.Split(' ').Length;
+            Console.WriteLine($"Total number of words in the string is : {wordsNumber}");
         }
+
         public static void StringTask10()
         {
             Console.WriteLine("Input the string : ");
             string str = Console.ReadLine().Trim();
             str = Regex.Replace(str, @"\s+", "");
-            char[] charlist = str.Distinct().ToArray();
-            int[] count = new int[charlist.Length];
+            char[] charList = str.Distinct().ToArray();
+            int[] count = new int[charList.Length];
 
             for (int i = 0; i < str.Length; i++)
             {
-                for (int k = 0; k < charlist.Length; k++)
+                for (int k = 0; k < charList.Length; k++)
                 {
-                    if (str[i] == charlist[k])
+                    if (str[i] == charList[k])
                     {
                         count[k]++;
                     }
@@ -261,58 +266,60 @@ namespace Homework3
             }
 
             int index = Array.IndexOf(count, count.Max());
-            Console.WriteLine($"The Highest frequency of character '{charlist[index]}' appears number of times: {count.Max()} ");
+            Console.WriteLine($"The Highest frequency of character '{charList[index]}' appears number of times: {count.Max()} ");
         }
+
         public static void StringTask15()
         {
             Console.WriteLine("Input the string : ");
             string str = Console.ReadLine().Trim();
-            char[] charlist =str.ToCharArray();
+            char[] charList =str.ToCharArray();
 
-            for (int i = 0; i < charlist.Length; i++)
+            for (int i = 0; i < charList.Length; i++)
             {
-                if (char.IsUpper(charlist[i]))
+                if (char.IsUpper(charList[i]))
                 {
-                    charlist[i] =char.ToLower(charlist[i]);
+                    charList[i] =char.ToLower(charList[i]);
                 }
                 else
                 {
-                   charlist[i] = char.ToUpper(charlist[i]);
+                   charList[i] = char.ToUpper(charList[i]);
                 }
             }
 
             Console.Write("After conversion, the string is : ");
 
-            for (int i = 0; i < charlist.Length; i++)
+            for (int i = 0; i < charList.Length; i++)
             {
-                Console.Write($"{charlist[i]}");
+                Console.Write($"{charList[i]}");
             }
         }
+
         public static void StringTask20()
         {
             Console.WriteLine("Input the original string : ");
             string str = Console.ReadLine().Trim();
             Console.WriteLine("Input the string to be searched for : ");
-            string searchstr = Console.ReadLine().Trim();
+            string searchStr = Console.ReadLine().Trim();
             Console.WriteLine("Input the string to be inserted : ");
-            string insertstr = Console.ReadLine().Trim();
+            string insertStr = Console.ReadLine().Trim();
             str = Regex.Replace(str, @"\s+", " ");
             string[] words = str.Split(' ');
-            string[] newstr = new string[words.Length + 1];
+            string[] newStr = new string[words.Length + 1];
 
             for (int i = 0; i < words.Length; i++)
             {
-                if (words[i] != searchstr)
+                if (words[i] != searchStr)
                 {
-                    newstr[i] = words[i];
+                    newStr[i] = words[i];
                 }
                 else
                 {
-                    newstr[i] = insertstr;
+                    newStr[i] = insertStr;
 
                     for (int k = i + 1; k < words.Length + 1; k++)
                     {
-                        newstr[k] = words[k - 1];
+                        newStr[k] = words[k - 1];
                     }
                     i = str.Length;
                 }
@@ -320,9 +327,9 @@ namespace Homework3
 
             Console.WriteLine("The modified string is: ");
 
-            for (int i = 0; i < newstr.Length; i++)
+            for (int i = 0; i < newStr.Length; i++)
             {
-                Console.Write($"{newstr[i]} ");
+                Console.Write($"{newStr[i]} ");
             }
         }
     }

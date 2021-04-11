@@ -18,27 +18,21 @@ namespace Homework2
                         TasksWithDays(DayOfWeek.Monday);
                         break;
                     case "tue" or "tuesday":
-                        day = "Tuesday";
                         TasksWithDays(DayOfWeek.Tuesday);
                         break;
                     case "wed" or "wednesday":
-                        day = "Wednesday";
                         TasksWithDays(DayOfWeek.Wednesday);
                         break;
                     case "thu" or "thursday":
-                        day = "Thursday";
                         TasksWithDays(DayOfWeek.Thursday);
                         break;
                     case "fri" or "friday":
-                        day = "Friday";
                         TasksWithDays(DayOfWeek.Friday);
                         break;
                     case "sat" or "saturday":
-                        day = "Saturday";
                         TasksWithDays(DayOfWeek.Saturday);
                         break;
                     case "sun" or "sunday":
-                        day = "Sunday";
                         TasksWithDays(DayOfWeek.Sunday);
                         break;
                     case "exit":
@@ -80,7 +74,6 @@ namespace Homework2
             }
             else
             {
-                
                 Console.WriteLine($"{DayOfWeek.Saturday - day} days before the weekend");
             }
 
