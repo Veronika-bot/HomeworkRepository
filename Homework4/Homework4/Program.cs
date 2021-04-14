@@ -11,8 +11,7 @@ namespace Homework4
         private DateTime date;
         private TimeSpan time;
         private int priority;
-
-        private static List<WeeklyTask> allTasks { get; } = new();
+        private static List<WeeklyTask> allTasks = new();
 
         public WeeklyTask(string taskName, DateTime date) : this(taskName, date, 1)
         {
@@ -45,6 +44,50 @@ namespace Homework4
                 Console.WriteLine($"{allTasks[i].taskName}, {allTasks[i].date.ToShortDateString()}, {allTasks[i].time}, {allTasks[i].priority}");
             }
         }
+
+        public static void EnterFilter()
+        {
+            while(true)
+            {
+                Console.WriteLine("Filter data: yes or no?");
+                string answer = Console.ReadLine().Trim().ToLower();
+
+                if (answer == "no")
+                {
+                    break;
+                }
+
+                if (answer == "yes")
+                {
+                    Console.WriteLine("Enter filter: ");
+                    string filter = Console.ReadLine().Trim();
+                    filter = Regex.Replace(filter, @"\s+", " ");
+                    string[] words = filter.Split(' ');
+
+                    if (words[0] == "filter" && words[1] == "priority")
+                    {
+                        for (int i = 0; i < allTasks.Count; i++)
+                        {
+                            if (int.Parse(words[2]) == allTasks[i].priority)
+                            {
+                                Console.WriteLine($"{allTasks[i].taskName}, {allTasks[i].date.ToShortDateString()}, {allTasks[i].time}, {allTasks[i].priority}");
+                            }
+                        }
+                    }
+                    else if (words[0] == "filter" && words[1] == "date")
+                    {
+                        for (int i = 0; i < allTasks.Count; i++)
+                        {
+                            if (Convert.ToDateTime(words[2]) < allTasks[i].date)
+                            {
+                                Console.WriteLine($"{allTasks[i].taskName}, {allTasks[i].date.ToShortDateString()}, {allTasks[i].time}, {allTasks[i].priority}");
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
     class Program
@@ -54,6 +97,7 @@ namespace Homework4
         {
             EnterTask();
             WeeklyTask.PrintAllTasks();
+            WeeklyTask.EnterFilter();
         }
 
         public static void EnterTask()
