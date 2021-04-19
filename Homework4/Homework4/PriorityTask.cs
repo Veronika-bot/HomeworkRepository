@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Homework4
 {
-    class PriorityTask : RegularTask
+    internal class PriorityTask : RegularTask
     {
         private readonly Priority priority;
 
@@ -30,6 +30,11 @@ namespace Homework4
             }
 
             return output;
+        }
+
+        public override string GetAlarm()
+        {
+            return base.GetAlarm();
         }
     }
 }

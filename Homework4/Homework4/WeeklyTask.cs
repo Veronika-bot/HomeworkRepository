@@ -17,8 +17,9 @@ namespace Homework4
 
         public virtual string ConvertToString(int index)
         {
-            var output = $"Task #{index + 1}: {name} ";
-            return output;
+            return $"Task #{index + 1}: {name} ";
         }
+
+        public abstract string GetAlarm();
     }
 }

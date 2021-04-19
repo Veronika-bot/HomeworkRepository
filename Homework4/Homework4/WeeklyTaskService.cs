@@ -20,6 +20,13 @@ namespace Homework4
             Console.WriteLine("Add task in format: {},{},{},{}");
             var inputData = Console.ReadLine();
             var task = ParseNewTask(inputData);
+
+            if (task == null)
+            {
+                Console.WriteLine("Invalid task format, try again.");
+                return;
+            }
+
             AddNewTask(task);
         }
 
@@ -28,11 +35,11 @@ namespace Homework4
             Console.WriteLine("Input number to update:");
             var inputNumber = Console.ReadLine();
             var taskNumber = int.Parse(inputNumber);
-            
+
             Console.WriteLine("Input new task data:");
             var inputTaskData = Console.ReadLine();
             var task = ParseNewTask(inputTaskData);
-            tasks[taskNumber - 1] = task;
+            UpdateTask(taskNumber, task);
         }
 
         public void FilterTaskByPriority()
@@ -42,15 +49,13 @@ namespace Homework4
 
             for (int i = 0; i < tasks.Count; i++)
             {
-                var task = tasks[i];
-
-                if (((PriorityTask) tasks[i]).GetPriority().ToString() == priority)
+                if (tasks[i] is PriorityTask priorityTask && priorityTask.GetPriority().ToString() == priority)
                 {
-                    PrintTask(i, task);
+                    PrintTask(i);
                 }
             }
         }
-
+        
         public void FilterTaskByDate()
         {
             Console.WriteLine("Input data:");
@@ -59,11 +64,9 @@ namespace Homework4
 
             for (int i = 0; i < tasks.Count; i++)
             {
-                var task = tasks[i];
-
-                if (((RegularTask)tasks[i]).GetDate() >= date)
+                if (tasks[i] is RegularTask regularTask && regularTask.GetDate() >= date)
                 {
-                    PrintTask(i, task);
+                    PrintTask(i);
                 }
             }
         }
@@ -72,14 +75,19 @@ namespace Homework4
         {
             for (int i = 0; i < tasks.Count; i++)
             {
-                var task = tasks[i];
-                PrintTask(i, task);
+                PrintTask(i);
+                Console.WriteLine(tasks[i].GetAlarm());
             }
         }
 
-        private static void PrintTask(int i, WeeklyTask task)
+        private void UpdateTask(int taskNumber, WeeklyTask task)
         {
-            Console.WriteLine(task.ConvertToString(i));
+            tasks[taskNumber - 1] = task;
+        }
+
+        private void PrintTask(int i)
+        {
+            Console.WriteLine(tasks[i].ConvertToString(i));
         }
 
         private WeeklyTask ParseNewTask(string inputData)

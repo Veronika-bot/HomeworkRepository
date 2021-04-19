@@ -5,6 +5,7 @@ namespace Homework4
     class Program
     {
         private static WeeklyTaskService service = new WeeklyTaskService();
+
         static void Main(string[] args)
         {
             RunInLoop();

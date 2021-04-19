@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace Homework4
 {
-    class RegularTask : WeeklyTask
+    internal class RegularTask : WeeklyTask
     {
         private readonly DateTime date;
         private readonly TimeSpan time;
 
         public RegularTask(string name) : base(name)
-        { 
-        
+        {
         }
 
         public RegularTask(string name, DateTime date) : base(name)
@@ -47,6 +46,11 @@ namespace Homework4
             }
 
             return output;
+        }
+
+        public override string GetAlarm()
+        {
+            return $"{(date - DateTime.Today).Days} days left";
         }
     }
 }
