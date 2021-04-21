@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Homework4
 {
     internal class WeeklyTaskService
     {
+        delegate void GetMessage(int taskNumber);
+        delegate void WriteOutput(string text);
+        delegate string ReadInput();
+        private readonly WriteOutput outputDel = Program.WriteOutput;
+        private readonly ReadInput inputDel = Program.ReadInputString;
         private readonly List<WeeklyTask> tasks;
 
         public WeeklyTaskService()
@@ -16,50 +18,41 @@ namespace Homework4
         }
 
         public void AddNewTask()
-        { 
-            Console.WriteLine("Add task in format: {},{},{},{}");
-            var inputData = Console.ReadLine();
-            var task = ParseNewTask(inputData);
-
-            if (task == null)
-            {
-                Console.WriteLine("Invalid task format, try again.");
-                return;
-            }
-
-            AddNewTask(task);
+        {
+            outputDel("Add task in format: {},{},{},{}");
+            var inputData = inputDel();
+            Add(inputData);
         }
 
         public void UpdateTask()
         {
-            Console.WriteLine("Input number to update:");
-            var inputNumber = Console.ReadLine();
+            outputDel("Input number to update:");
+            var inputNumber = inputDel();
             var taskNumber = int.Parse(inputNumber);
 
-            Console.WriteLine("Input new task data:");
-            var inputTaskData = Console.ReadLine();
-            var task = ParseNewTask(inputTaskData);
-            UpdateTask(taskNumber, task);
+            outputDel("Input new task data:");
+            var inputTaskData = inputDel().Trim();
+            Update(taskNumber, inputTaskData);
         }
 
         public void FilterTaskByPriority()
         {
-            Console.WriteLine("Input priority:");
-            var priority = Console.ReadLine();
+            outputDel("Input priority:");
+            var parsedPriority = Enum.Parse<Priority>(inputDel());
 
             for (int i = 0; i < tasks.Count; i++)
             {
-                if (tasks[i] is PriorityTask priorityTask && priorityTask.GetPriority().ToString() == priority)
+                if (tasks[i] is PriorityTask priorityTask && priorityTask.GetPriority() == parsedPriority)
                 {
                     PrintTask(i);
                 }
             }
         }
-        
+
         public void FilterTaskByDate()
         {
-            Console.WriteLine("Input data:");
-            var inputDate = Console.ReadLine();
+            outputDel("Input data:");
+            var inputDate = inputDel();
             var date = DateTime.Parse(inputDate);
 
             for (int i = 0; i < tasks.Count; i++)
@@ -76,18 +69,51 @@ namespace Homework4
             for (int i = 0; i < tasks.Count; i++)
             {
                 PrintTask(i);
-                Console.WriteLine(tasks[i].GetAlarm());
+                outputDel(tasks[i].GetAlarm());
+            }
+        }
+
+        private void Add(string inputData)
+        {
+            if (!string.IsNullOrEmpty(inputData))
+            {
+                var task = ParseNewTask(inputData);
+                AddNewTask(task);
+            }
+            else
+            {
+                outputDel("Invalid task format, try again.");
+            }
+        }
+
+        private void Update(int taskNumber, string inputTaskData)
+        {
+            if (!string.IsNullOrEmpty(inputTaskData))
+            {
+                var task = ParseNewTask(inputTaskData);
+                UpdateTask(taskNumber, task);
+            }
+            else
+            {
+                outputDel($"Task #{taskNumber} hasn't been updated");
             }
         }
 
         private void UpdateTask(int taskNumber, WeeklyTask task)
         {
             tasks[taskNumber - 1] = task;
+            GetMessage del = PrintUpdateMessage;
+            del(taskNumber);
+        }
+
+        private void PrintUpdateMessage(int taskNumber)
+        {
+            outputDel($"Task #{taskNumber} has been updated");
         }
 
         private void PrintTask(int i)
         {
-            Console.WriteLine(tasks[i].ConvertToString(i));
+            outputDel(tasks[i].ConvertToString(i));
         }
 
         private WeeklyTask ParseNewTask(string inputData)
@@ -96,7 +122,7 @@ namespace Homework4
 
             if (parts == null || parts.Length < 1 || parts.Length > 4)
             {
-                Console.WriteLine("Invalid task format, try again.");
+                outputDel("Invalid task format, try again.");
                 return null;
             }
 
@@ -117,7 +143,7 @@ namespace Homework4
 
         private WeeklyTask CreateTaskWithName(string[] parts)
         {
-             return new RegularTask(parts[0]);
+            return new RegularTask(parts[0]);
         }
 
         private WeeklyTask CreateTaskWithDate(string[] parts)
@@ -151,5 +177,7 @@ namespace Homework4
         {
             tasks.Add(task);
         }
+
+        
     }
 }

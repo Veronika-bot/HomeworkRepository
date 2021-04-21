@@ -4,12 +4,22 @@ namespace Homework4
 {
     class Program
     {
-        private static WeeklyTaskService service = new WeeklyTaskService();
+        private static WeeklyTaskService service = new();
 
         static void Main(string[] args)
         {
             RunInLoop();
             Console.ReadKey();
+        }
+
+        public static string ReadInputString()
+        {
+            return Console.ReadLine();
+        }
+
+        public static void WriteOutput(string text)
+        {
+            Console.WriteLine(text);
         }
 
         private static void RunInLoop()
