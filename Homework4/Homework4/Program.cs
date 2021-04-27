@@ -8,16 +8,25 @@ namespace Homework4
 
         static void Main(string[] args)
         {
+            service.SetInputReader(ReadInputString);
+            service.SetOutputWriter(WriteOutput);
+            service.SetUpdateTaskNotifier(TaskNotifier);
+
             RunInLoop();
             Console.ReadKey();
         }
 
-        public static string ReadInputString()
+        private static string ReadInputString()
         {
             return Console.ReadLine();
         }
 
-        public static void WriteOutput(string text)
+        private static void TaskNotifier(string message, int taskNumber)
+        {
+             Console.WriteLine($"Task #{taskNumber} {message}");
+        }
+
+        private static void WriteOutput(string text)
         {
             Console.WriteLine(text);
         }

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace Homework4
 {
+    public delegate void WriteOutput(string text);
+    public delegate string ReadInput();
+    public delegate void UpdateTaskNotifier(string message, int taskNumber);
+
     internal class WeeklyTaskService
     {
-        delegate void GetMessage(int taskNumber);
-        delegate void WriteOutput(string text);
-        delegate string ReadInput();
-        private readonly WriteOutput outputDel = Program.WriteOutput;
-        private readonly ReadInput inputDel = Program.ReadInputString;
+        private WriteOutput writeOutput;
+        private ReadInput readInput;
+        private UpdateTaskNotifier updateTaskNotifier;
         private readonly List<WeeklyTask> tasks;
 
         public WeeklyTaskService()
@@ -17,28 +19,43 @@ namespace Homework4
             tasks = new();
         }
 
+        public void SetOutputWriter(WriteOutput outputWriter)
+        {
+            writeOutput = outputWriter;   
+        }
+
+        public void SetInputReader(ReadInput inputWriter)
+        {
+            readInput = inputWriter;
+        }
+
+        public void SetUpdateTaskNotifier(UpdateTaskNotifier taskNotifierUpdate)
+        {
+            updateTaskNotifier = taskNotifierUpdate;
+        }
+
         public void AddNewTask()
         {
-            outputDel("Add task in format: {},{},{},{}");
-            var inputData = inputDel();
+            writeOutput("Add task in format: {},{},{},{}");
+            var inputData = readInput();
             Add(inputData);
         }
 
         public void UpdateTask()
         {
-            outputDel("Input number to update:");
-            var inputNumber = inputDel();
+            writeOutput("Input number to update:");
+            var inputNumber = readInput();
             var taskNumber = int.Parse(inputNumber);
 
-            outputDel("Input new task data:");
-            var inputTaskData = inputDel().Trim();
+            writeOutput("Input new task data:");
+            var inputTaskData = readInput().Trim();
             Update(taskNumber, inputTaskData);
         }
 
         public void FilterTaskByPriority()
         {
-            outputDel("Input priority:");
-            var parsedPriority = Enum.Parse<Priority>(inputDel());
+            writeOutput("Input priority:");
+            var parsedPriority = Enum.Parse<Priority>(readInput());
 
             for (int i = 0; i < tasks.Count; i++)
             {
@@ -51,8 +68,8 @@ namespace Homework4
 
         public void FilterTaskByDate()
         {
-            outputDel("Input data:");
-            var inputDate = inputDel();
+            writeOutput("Input data:");
+            var inputDate = readInput();
             var date = DateTime.Parse(inputDate);
 
             for (int i = 0; i < tasks.Count; i++)
@@ -69,7 +86,7 @@ namespace Homework4
             for (int i = 0; i < tasks.Count; i++)
             {
                 PrintTask(i);
-                outputDel(tasks[i].GetAlarm());
+                writeOutput(tasks[i].GetAlarm());
             }
         }
 
@@ -82,7 +99,7 @@ namespace Homework4
             }
             else
             {
-                outputDel("Invalid task format, try again.");
+                writeOutput("Invalid task format, try again.");
             }
         }
 
@@ -95,25 +112,19 @@ namespace Homework4
             }
             else
             {
-                outputDel($"Task #{taskNumber} hasn't been updated");
+                writeOutput($"Task #{taskNumber} hasn't been updated");
             }
         }
 
         private void UpdateTask(int taskNumber, WeeklyTask task)
         {
             tasks[taskNumber - 1] = task;
-            GetMessage del = PrintUpdateMessage;
-            del(taskNumber);
-        }
-
-        private void PrintUpdateMessage(int taskNumber)
-        {
-            outputDel($"Task #{taskNumber} has been updated");
+            updateTaskNotifier(" has been updated", taskNumber);
         }
 
         private void PrintTask(int i)
         {
-            outputDel(tasks[i].ConvertToString(i));
+            writeOutput(tasks[i].ConvertToString(i));
         }
 
         private WeeklyTask ParseNewTask(string inputData)
@@ -122,7 +133,7 @@ namespace Homework4
 
             if (parts == null || parts.Length < 1 || parts.Length > 4)
             {
-                outputDel("Invalid task format, try again.");
+                writeOutput("Invalid task format, try again.");
                 return null;
             }
 
@@ -177,7 +188,5 @@ namespace Homework4
         {
             tasks.Add(task);
         }
-
-        
     }
 }
