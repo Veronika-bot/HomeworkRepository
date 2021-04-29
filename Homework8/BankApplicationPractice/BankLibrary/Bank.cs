@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 
 namespace BankLibrary
 {
     public class Bank<T> where T : Account
     {
-        private readonly List<T> _accounts = new();
+        private readonly AccountsCollection _accounts = new();
 
         private void CreateAccount(OpenAccountParameters parameters, Func<T> creator)
         {
@@ -27,7 +26,7 @@ namespace BankLibrary
 
         private void AssertValidId(int id)
         {
-            if (id < 0 || id >= _accounts.Count)
+            if (id < 0 || id >= _accounts.GetCount())
             {
                 throw new InvalidOperationException("An account with this number does not exist");
             }
@@ -66,16 +65,16 @@ namespace BankLibrary
         {
             AssertValidId(parameters.Id);
 
-            var account = _accounts[parameters.Id];
+            var account = _accounts.GetItem(parameters.Id);
             account.Close();
-            ClearSubscriptions(parameters, account);
+            ClearSubscriptions(parameters, (T)account);
         }
 
         public void PutAmount(PutAccountParameters parameters)
         {
             AssertValidId(parameters.Id);
 
-            var account = _accounts[parameters.Id];
+            var account = _accounts.GetItem(parameters.Id);
             account.Put(parameters.Amount);
         }
 
@@ -83,16 +82,16 @@ namespace BankLibrary
         {
             AssertValidId(parameters.Id);
 
-            var account = _accounts[parameters.Id];
+            var account = _accounts.GetItem(parameters.Id);
             account.Withdraw(parameters.Amount);
         }
 
         public void IncrementDay()
         {
-            for (int i = 0; i < _accounts.Count; i++)
+            for (int i = 0; i < _accounts.GetCount(); i++)
             {
-                _accounts[i].IncrementDays();
-                _accounts[i].CalculatePercentage();
+                _accounts.GetItem(i).IncrementDays();
+                _accounts.GetItem(i).CalculatePercentage();
             }
         }
     }
