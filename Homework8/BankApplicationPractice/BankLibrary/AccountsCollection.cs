@@ -6,15 +6,17 @@ namespace BankLibrary
     public class AccountsCollection : IEnumerable<Account>
     {
         private readonly List<Account> _accounts;
+        private readonly AccountsCollectionEnumerator _enumerator;
 
         public AccountsCollection()
         {
             _accounts = new();
+            _enumerator = new AccountsCollectionEnumerator(_accounts);
         }
 
         public IEnumerator GetEnumerator()
         {
-            return _accounts.GetEnumerator();
+            return _enumerator;
         }
 
         public int GetCount()

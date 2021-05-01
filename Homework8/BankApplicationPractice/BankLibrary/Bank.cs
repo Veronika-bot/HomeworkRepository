@@ -1,10 +1,48 @@
 using System;
+using System.Collections.Generic;
 
 namespace BankLibrary
 {
     public class Bank<T> where T : Account
     {
+        private const string KgkPassPhrase = "CleanUp";
         private readonly AccountsCollection _accounts = new();
+        private readonly Dictionary<Locker, object> _lockers = new();
+
+        public void AddLocker(int id, string keyword, object data)
+        {
+            var locker = new Locker(id, keyword);
+            _lockers.Add(locker, data);
+        }
+
+        public object GetLockerData(int id, string keyword)
+        {
+            foreach (KeyValuePair<Locker, object> locker in _lockers)
+            {
+                if (locker.Key.Matches(id, keyword))
+                {
+                    return $"Watch your data: {locker.Value}";
+                }
+            }
+
+            throw new  InvalidOperationException($"Cannot find locker with ID or keyword does not match");
+        }
+
+        public TU GetLockerData<TU>(int id, string keyword)
+        {
+            return (TU)GetLockerData(id, keyword);
+        }
+
+        public void VisitKgk(string passPhrase)
+        {
+            if (passPhrase.Equals(KgkPassPhrase))
+            {
+                foreach (Locker key in _lockers.Keys)
+                {
+                    _lockers[key] = null;
+                }
+            }
+        }
 
         private void CreateAccount(OpenAccountParameters parameters, Func<T> creator)
         {
