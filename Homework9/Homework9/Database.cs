@@ -50,28 +50,14 @@ namespace Linq
 
         public Order[] GetOrders(int customerId)
         {
-            var selectedOrders = from orders in Orders
-                                 where orders.CustomerId == customerId
-                                 select orders;
-
-            foreach (Order order in selectedOrders)
-            {
-                Console.WriteLine($"{order.Id} - {order.ProductId} - {order.CustomerId}");
-            }
-
-            return null;
+            return (from orders in Orders
+                    where orders.CustomerId == customerId
+                    select orders).ToArray();
         }
 
         public Order GetOrder(int orderId)
         {
-            var selectedOrder = Orders.Where(o => o.Id == orderId);
-
-            foreach (Order order in selectedOrder)
-            {
-                Console.WriteLine($"{order.Id} - {order.ProductId} - {order.CustomerId}");
-            }
-
-            return null;
+            return Orders.SingleOrDefault(o => o.Id == orderId);
         }
 
         public decimal GetMoneySpentBy(int customerId)
@@ -84,41 +70,24 @@ namespace Linq
                                     Price = products.Price
                                 };
 
-            var sum = productsPrice.Sum(n => n.Price);
-
-            return sum;
+            return productsPrice.Sum(n => n.Price);
         }
 
         public Product[] GetAllProductsPurchased(int customerId)
         {
-            var selectedProducts = from orders in Orders
-                                   join products in Products on orders.ProductId equals products.Id
-                                   where orders.CustomerId == customerId
-                                   select products;
-
-            foreach (Product product in selectedProducts)
-            {
-                Console.WriteLine($"{product.Id} - {product.Name}");
-            }
-
-            return null;
+            return (from orders in Orders
+                    join products in Products on orders.ProductId equals products.Id
+                    where orders.CustomerId == customerId
+                    select products).ToArray();
         }
 
         public Product[] GetUniqueProductsPurchased(int customerId)
-        {
-            var selectedProducts = from orders in Orders
-                                   join products in Products on orders.ProductId equals products.Id
-                                   where orders.CustomerId == customerId
-                                   select products;
-
-            foreach (Product product in selectedProducts.Distinct())
-            {
-                Console.WriteLine($"{product.Id} - {product.Name}");
-            }
-
-            return null;
+        {   
+            return (from orders in Orders 
+                    join products in Products on orders.ProductId equals products.Id 
+                    where orders.CustomerId == customerId 
+                    select products).ToArray();
         }
-
 
         public bool HasEverPurchasedProduct(int customerId, int productId)
         {
@@ -127,12 +96,12 @@ namespace Linq
 
         public bool AreAllPurchasesHigherThan(int customerId, decimal targetPrice)
         {
-            var newTable = Orders.Join(Products,
+            var newTable = Orders.Where(o => o.CustomerId == customerId).Join(Products,
                  o => o.ProductId,
                  p => p.Id,
                  (o, p) => new
                  {
-                     Customer = o.CustomerId == customerId,
+                     Customer = o.CustomerId,
                      Price = p.Price
                  });
 
@@ -145,12 +114,47 @@ namespace Linq
                         where orders.CustomerId == customerId
                         select orders.ProductId).ToArray();
 
-            if (selectedProducts.Distinct().Except(productIds).Count() == 0)
-            {
-                return true;
-            }
+            return selectedProducts.Any(p => productIds.Contains(p));
+        }
 
-            return false;
+        public int GetTotalProductsPurchased(int productId)
+        { 
+            return Orders.Where(o => o.ProductId == productId).Count();
+        }
+
+        public CustomerOverView GetCustomerOverview(int customerId)
+        {
+            var name = (from customers in Customers
+                       where customers.Id == customerId
+                       select customers.Name).First();
+
+            var totalProductsPurchased = Orders.Where(o => o.CustomerId == customerId).Count();
+
+            var allProducts = from orders in Orders
+                              join products in Products on orders.ProductId equals products.Id
+                              where orders.CustomerId == customerId
+                              group products by products.Name into n
+                              select new
+                              {
+                                  Name = n.Key,
+                                  Count = n.Count()
+                              };
+
+            var maxCount = allProducts.Max(n => n.Count);
+
+            var favotiteProductName = allProducts.Where(n => n.Count == maxCount).Select(n => n.Name).First();
+
+
+            var priceProducts = from orders in Orders
+                                  join products in Products on orders.ProductId equals products.Id
+                                  where orders.CustomerId == customerId
+                                  select products.Price;
+
+            var maxAmountSpentPerProducts = priceProducts.Max();
+
+            var totalMoneySpent = priceProducts.Sum();
+
+            return new CustomerOverView(name, totalProductsPurchased, favotiteProductName, maxAmountSpentPerProducts, totalMoneySpent);
         }
     }
 }

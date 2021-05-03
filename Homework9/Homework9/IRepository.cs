@@ -12,7 +12,7 @@
         
         Product[] GetUniqueProductsPurchased(int customerId);
         
-        //int GetTotalProductsPurchased(int productId);
+        int GetTotalProductsPurchased(int productId);
         
         bool HasEverPurchasedProduct(int customerId, int productId);
         
@@ -20,7 +20,7 @@
         
         bool DidPurchaseAllProducts(int customerId, params int[] productIds);
         
-        //CustomerOverView GetCustomerOverview(int customerId);
+        CustomerOverView GetCustomerOverview(int customerId);
         
         //List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId);
     }
