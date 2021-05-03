@@ -1,4 +1,6 @@
-﻿namespace Linq
+﻿using System.Collections.Generic;
+
+namespace Linq
 {
     interface IRepository
     {
@@ -22,6 +24,6 @@
         
         CustomerOverView GetCustomerOverview(int customerId);
         
-        //List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId);
+        List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId);
     }
 }

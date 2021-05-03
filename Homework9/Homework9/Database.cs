@@ -156,5 +156,20 @@ namespace Linq
 
             return new CustomerOverView(name, totalProductsPurchased, favotiteProductName, maxAmountSpentPerProducts, totalMoneySpent);
         }
+
+        public List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId)
+        {
+            var productName = (from orders in Orders
+                              join products in Products on orders.ProductId equals products.Id
+                              where orders.CustomerId == customerId
+                              group products by products.Name into n
+                              select new
+                              {
+                                  Name = n.Key,
+                                  Count = n.Count()
+                              }).Select(n => (n.Name, n.Count)).ToList();
+
+            return productName;
+        }
     }
 }
